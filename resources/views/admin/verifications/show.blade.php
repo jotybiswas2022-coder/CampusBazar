@@ -26,15 +26,16 @@
 
         <div class="card card-pad">
             <h3>ID documents</h3>
+            <p class="small muted">Click an image to view it in full size.</p>
             <div class="grid grid-2 mt-2">
                 <div>
                     <div class="small muted mb-1">Front side</div>
-                    <img src="{{ route('verification.document', [$verification, 'front']) }}" alt="ID front" style="border-radius:10px;border:1px solid var(--border)">
+                    <img class="doc-thumb" src="{{ route('verification.document', [$verification, 'front']) }}" alt="ID front" data-label="Front side" tabindex="0" role="button">
                 </div>
                 @if($verification->back_image_path)
                     <div>
                         <div class="small muted mb-1">Back side</div>
-                        <img src="{{ route('verification.document', [$verification, 'back']) }}" alt="ID back" style="border-radius:10px;border:1px solid var(--border)">
+                        <img class="doc-thumb" src="{{ route('verification.document', [$verification, 'back']) }}" alt="ID back" data-label="Back side" tabindex="0" role="button">
                     </div>
                 @endif
             </div>
@@ -73,4 +74,120 @@
         </form>
     </aside>
 </div>
+
+<div class="doc-modal" id="docModal" aria-hidden="true">
+    <button type="button" class="doc-modal-close" id="docModalClose" aria-label="Close">&times;</button>
+    <figure class="doc-modal-body">
+        <img id="docModalImg" src="" alt="">
+        <figcaption id="docModalCaption"></figcaption>
+    </figure>
+</div>
+
+<style>
+    .doc-thumb {
+        display: block;
+        width: 100%;
+        max-height: 240px;
+        object-fit: cover;
+        border-radius: 10px;
+        border: 1px solid var(--border);
+        cursor: zoom-in;
+        background: #fff;
+        transition: opacity .15s ease;
+    }
+    .doc-thumb:hover { opacity: .9; }
+    .doc-thumb:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+
+    .doc-modal {
+        position: fixed;
+        inset: 0;
+        z-index: 1000;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        background: rgba(6, 20, 14, .82);
+        padding: 2rem;
+    }
+    .doc-modal.is-open { display: flex; }
+    .doc-modal-body {
+        margin: 0;
+        max-width: min(90vw, 1000px);
+        max-height: 90vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: .75rem;
+    }
+    .doc-modal-body img {
+        max-width: 100%;
+        max-height: 82vh;
+        border-radius: 12px;
+        box-shadow: 0 24px 60px rgba(0, 0, 0, .5);
+        background: #fff;
+    }
+    .doc-modal-body figcaption {
+        color: #e6f2ec;
+        font-size: .85rem;
+        letter-spacing: .02em;
+    }
+    .doc-modal-close {
+        position: absolute;
+        top: 1rem;
+        right: 1.25rem;
+        width: 44px;
+        height: 44px;
+        border: 0;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, .15);
+        color: #fff;
+        font-size: 1.6rem;
+        line-height: 1;
+        cursor: pointer;
+    }
+    .doc-modal-close:hover { background: rgba(255, 255, 255, .3); }
+</style>
+
+<script>
+    (function () {
+        var modal = document.getElementById('docModal');
+        var modalImg = document.getElementById('docModalImg');
+        var caption = document.getElementById('docModalCaption');
+        var closeBtn = document.getElementById('docModalClose');
+
+        function openModal(img) {
+            modalImg.src = img.getAttribute('src');
+            modalImg.alt = img.getAttribute('alt') || '';
+            caption.textContent = img.getAttribute('data-label') || '';
+            modal.classList.add('is-open');
+            modal.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+            closeBtn.focus();
+        }
+
+        function closeModal() {
+            modal.classList.remove('is-open');
+            modal.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+            modalImg.src = '';
+        }
+
+        document.querySelectorAll('.doc-thumb').forEach(function (img) {
+            img.addEventListener('click', function () { openModal(img); });
+            img.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    openModal(img);
+                }
+            });
+        });
+
+        closeBtn.addEventListener('click', closeModal);
+        modal.addEventListener('click', function (e) {
+            if (e.target === modal) { closeModal(); }
+        });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && modal.classList.contains('is-open')) { closeModal(); }
+        });
+    })();
+</script>
 @endsection
