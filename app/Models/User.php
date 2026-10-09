@@ -2,9 +2,13 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Enums\UserRole;
+use App\Enums\VerificationStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -14,21 +18,23 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     /**
-     * The attributes that are mass assignable.
-     *
      * @var list<string>
      */
     protected $fillable = [
         'name',
         'email',
+        'phone',
         'password',
         'avatar_path',
+        'bio',
+        'campus_id',
+        'role',
         'is_admin',
+        'status',
+        'verified_at',
     ];
 
     /**
-     * The attributes that should be hidden for serialization.
-     *
      * @var list<string>
      */
     protected $hidden = [
@@ -36,94 +42,132 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'verified_at' => 'datetime',
+            'last_seen_at' => 'datetime',
+            'is_admin' => 'boolean',
         ];
     }
 
-    public function posts(): HasMany
+    // ===== Role / verification helpers =====
+
+    public function isAdmin(): bool
     {
-        return $this->hasMany(Post::class);
+        return $this->role === UserRole::ADMIN || (bool) $this->is_admin;
     }
 
-    public function postReactions(): HasMany
+    public function isStudent(): bool
     {
-        return $this->hasMany(PostReaction::class);
+        return ! $this->isAdmin();
     }
 
-    public function postComments(): HasMany
+    public function isVerified(): bool
     {
-        return $this->hasMany(PostComment::class);
+        return $this->verified_at !== null;
     }
 
-    public function postCommentReactions(): HasMany
+    public function verificationStatus(): string
     {
-        return $this->hasMany(PostCommentReaction::class);
+        $request = $this->latestVerificationRequest;
+
+        if (! $request) {
+            return VerificationStatus::NOT_SUBMITTED;
+        }
+
+        if ($request->status === VerificationStatus::APPROVED && $this->verified_at) {
+            return VerificationStatus::APPROVED;
+        }
+
+        return $request->status;
     }
 
-    public function notifications(): HasMany
+    public function hasActiveVerificationRequest(): bool
     {
-        return $this->hasMany(Notification::class, 'user_id');
+        return $this->verificationRequests()
+            ->whereIn('status', [VerificationStatus::PENDING, VerificationStatus::APPROVED])
+            ->exists();
     }
 
-    // ===== Friend Request Relationships =====
-
-    /**
-     * Friend requests sent by this user.
-     */
-    public function sentFriendRequests(): HasMany
+    public function canResubmitVerification(): bool
     {
-        return $this->hasMany(FriendRequest::class, 'sender_id');
+        return in_array($this->verificationStatus(), [
+            VerificationStatus::NOT_SUBMITTED,
+            VerificationStatus::REJECTED,
+            VerificationStatus::RESUBMISSION_REQUIRED,
+        ], true);
     }
 
-    /**
-     * Friend requests received by this user.
-     */
-    public function receivedFriendRequests(): HasMany
+    public function initials(): string
     {
-        return $this->hasMany(FriendRequest::class, 'receiver_id');
+        $parts = preg_split('/\s+/', trim((string) $this->name));
+
+        return strtoupper(substr($parts[0] ?? '?', 0, 1) . substr($parts[1] ?? '', 0, 1));
     }
 
-    /**
-     * Get all accepted friends (users who have accepted this user's request).
-     */
-    public function friendsOfMine(): HasMany
+    // ===== Relationships =====
+
+    public function campus(): BelongsTo
     {
-        return $this->hasMany(FriendRequest::class, 'sender_id')->where('status', 'accepted');
+        return $this->belongsTo(Campus::class);
     }
 
-    /**
-     * Get all accepted friends (users whose requests this user has accepted).
-     */
-    public function friendsOf(): HasMany
+    public function products(): HasMany
     {
-        return $this->hasMany(FriendRequest::class, 'receiver_id')->where('status', 'accepted');
+        return $this->hasMany(Product::class);
     }
 
-    /**
-     * Get all friends of this user.
-     */
-    public function friends()
+    public function verificationRequests(): HasMany
     {
-        return $this->friendsOfMine()->with('receiver')
-            ->get()
-            ->map(function ($request) {
-                return $request->receiver;
-            })
-            ->concat(
-                $this->friendsOf()->with('sender')
-                    ->get()
-                    ->map(function ($request) {
-                        return $request->sender;
-                    })
-            );
+        return $this->hasMany(VerificationRequest::class);
+    }
+
+    public function latestVerificationRequest(): HasOne
+    {
+        return $this->hasOne(VerificationRequest::class)->latestOfMany();
+    }
+
+    public function wishlist(): HasMany
+    {
+        return $this->hasMany(Wishlist::class);
+    }
+
+    public function wishlistedProducts(): BelongsToMany
+    {
+        return $this->belongsToMany(Product::class, 'wishlists')->withTimestamps();
+    }
+
+    public function buyerOrders(): HasMany
+    {
+        return $this->hasMany(Order::class, 'buyer_id');
+    }
+
+    public function sellerOrders(): HasMany
+    {
+        return $this->hasMany(Order::class, 'seller_id');
+    }
+
+    public function conversations(): HasMany
+    {
+        return $this->hasMany(Conversation::class, 'user_one_id')
+            ->orWhere('user_two_id', $this->id);
+    }
+
+    public function messages(): HasMany
+    {
+        return $this->hasMany(Message::class, 'sender_id');
+    }
+
+    public function reviewsReceived(): HasMany
+    {
+        return $this->hasMany(Review::class, 'seller_id');
+    }
+
+    public function unreadNotificationsCount(): int
+    {
+        return $this->unreadNotifications()->count();
     }
 }
