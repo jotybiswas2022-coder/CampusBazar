@@ -8,10 +8,10 @@
                     </span>
                     <span>Campus<em>Bazar</em></span>
                 </div>
-                <p class="small" style="max-width:320px;color:#a9c7b8">
+                <p class="footer-about">
                     A student-only marketplace for colleges and universities in Bangladesh. Buy smart, sell easy, stay connected.
                 </p>
-                <span class="cod-note mt-2" style="margin-top:.9rem">
+                <span class="cod-note footer-cod">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a4 4 0 0 0-8 0v2"/></svg>
                     Cash on Delivery only
                 </span>
@@ -40,7 +40,13 @@
         </div>
         <div class="footer-bottom">
             <span>&copy; {{ date('Y') }} CampusBazar. Made for students in Bangladesh.</span>
-            <span>Prices in BDT (৳) · COD only</span>
+            <span class="footer-legal">
+                <span>Prices in BDT (৳) · COD only</span>
+                <a class="to-top" href="#top">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+                    Back to top
+                </a>
+            </span>
         </div>
     </div>
 </footer>

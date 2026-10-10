@@ -50,3 +50,26 @@ if (! function_exists('verification_status_label')) {
         return VerificationStatus::label($status);
     }
 }
+
+if (! function_exists('campus_code')) {
+    /**
+     * Short acronym for a campus name, used as its badge.
+     * "Bangladesh University of Engineering and Technology" -> "BUET"
+     */
+    function campus_code(string $name): string
+    {
+        $code = '';
+
+        foreach (preg_split('/\s+/', trim($name)) as $word) {
+            $word = preg_replace('/[^A-Za-z]/', '', $word);
+
+            if ($word === '' || in_array(strtolower($word), ['of', 'and', 'the'], true)) {
+                continue;
+            }
+
+            $code .= strtoupper($word[0]);
+        }
+
+        return substr($code, 0, 4) ?: strtoupper(substr($name, 0, 1));
+    }
+}

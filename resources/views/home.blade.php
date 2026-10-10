@@ -109,13 +109,7 @@
     .cat-chip:hover .arw{opacity:1;transform:none}
     .cat-chip .arw svg{width:16px;height:16px}
 
-    /* ============================================================
-       Campus cards
-       ============================================================ */
-    .campus-card{position:relative;overflow:hidden;display:flex;flex-direction:column;gap:.5rem}
-    .campus-card .bar{position:absolute;top:0;bottom:0;left:0;width:4px;background:linear-gradient(180deg,var(--emerald),var(--primary));transform:scaleY(.32);transform-origin:top;transition:transform .45s cubic-bezier(.22,1,.36,1)}
-    .campus-card:hover .bar{transform:scaleY(1)}
-    .campus-card .mono{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--primary),var(--emerald));color:#fff;display:grid;place-items:center;font-weight:800;font-size:.95rem;flex-shrink:0}
+    /* Campus tiles are shared (.campus-tile) — see layouts/app.blade.php */
 
     /* ============================================================
        How it works
@@ -195,8 +189,6 @@
         .cat-chip .cnt{font-size:.7rem}
         .cat-chip .arw{display:none}
 
-        .campus-card .bar{transform:scaleY(1)}
-        .campus-card .mono{width:36px;height:36px;border-radius:10px;font-size:.85rem}
 
         .steps{grid-template-columns:1fr;gap:.7rem}
         .steps::before{display:none}
@@ -369,18 +361,31 @@
         </div>
         <a class="btn btn-ghost" href="{{ route('campuses.index') }}">Campus directory</a>
     </div>
-    <div class="grid grid-3">
+    <div class="grid grid-3 campus-strip">
         @foreach($campuses as $campus)
-            <a class="card card-hover card-pad campus-card reveal" style="--d:{{ min($loop->index, 5) * 60 }}ms" href="{{ route('campuses.show', $campus) }}">
+            <a class="card campus-tile reveal" style="--d:{{ min($loop->index, 5) * 60 }}ms" href="{{ route('campuses.show', $campus) }}">
                 <span class="bar"></span>
-                <div class="row-between">
-                    <div class="row" style="gap:.7rem">
-                        <span class="mono">{{ strtoupper(substr($campus->name, 0, 1)) }}</span>
+                <div class="tile-top">
+                    <span class="tile-mono">{{ campus_code($campus->name) }}</span>
+                    <div class="tile-id">
                         <b>{{ $campus->name }}</b>
+                        <span class="tile-meta">{{ ucfirst($campus->type) }} · {{ $campus->district }}</span>
                     </div>
-                    <span class="pill pill-green">{{ $campus->products_count }}</span>
+                    <span class="tile-end">
+                        @if($campus->products_count > 0)
+                            <span class="pill pill-green" title="{{ $campus->products_count }} listing{{ $campus->products_count === 1 ? '' : 's' }}">{{ $campus->products_count }}<span class="pill-long"> listing{{ $campus->products_count === 1 ? '' : 's' }}</span></span>
+                        @else
+                            <span class="pill pill-gray" title="No listings yet">0</span>
+                        @endif
+                        <svg class="tile-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                    </span>
                 </div>
-                <div class="small muted" style="padding-left:3.1rem">{{ $campus->district }}</div>
+                @if($campus->location)
+                    <span class="tile-loc">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                        {{ $campus->location }}
+                    </span>
+                @endif
             </a>
         @endforeach
     </div>

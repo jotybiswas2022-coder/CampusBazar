@@ -121,17 +121,17 @@
             </form>
 
             <div class="mobile-links">
+                <span class="mobile-group">Browse</span>
                 <a href="{{ route('marketplace.index') }}"><span>Marketplace</span></a>
                 <a href="{{ route('campuses.index') }}"><span>Campus Directory</span></a>
 
                 @auth
-                    <div class="mobile-sep"></div>
+                    <span class="mobile-group">Your account</span>
+                    <a href="{{ route('seller.products.create') }}"><span>Sell an item</span></a>
                     <a href="{{ route('wishlist.index') }}"><span>Wishlist</span>@if($wishCount > 0)<span class="mobile-count">{{ $wishCount }}</span>@endif</a>
                     <a href="{{ route('messages.index') }}"><span>Messages</span>@if($unreadMessages > 0)<span class="mobile-count">{{ $unreadMessages }}</span>@endif</a>
                     <a href="{{ route('orders.index') }}"><span>Orders</span></a>
                     <a href="{{ route('notifications.index') }}"><span>Notifications</span>@if($unreadNotifs > 0)<span class="mobile-count">{{ $unreadNotifs }}</span>@endif</a>
-                    <a href="{{ route('seller.products.create') }}"><span>Sell an item</span></a>
-                    <div class="mobile-sep"></div>
                     @if($u->isAdmin())
                         <a href="{{ route('admin.dashboard') }}"><span>Admin Dashboard</span></a>
                     @endif
@@ -139,12 +139,13 @@
                     <a href="{{ route('seller.dashboard') }}"><span>Seller Dashboard</span></a>
                     <a href="{{ route('verification.status') }}"><span>ID Verification</span></a>
                     <a href="{{ route('profile.edit') }}"><span>Account Settings</span></a>
+                    <div class="mobile-sep"></div>
                     <form action="{{ route('logout') }}" method="POST">
                         @csrf
                         <button type="submit">Log out</button>
                     </form>
                 @else
-                    <div class="mobile-sep"></div>
+                    <span class="mobile-group">Get started</span>
                     <a href="{{ route('login') }}"><span>Log in</span></a>
                     <a href="{{ route('register') }}"><span>Create account</span></a>
                 @endauth

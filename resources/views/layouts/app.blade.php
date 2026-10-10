@@ -66,10 +66,13 @@
         header.site-header{
             background:rgba(255,255,255,.92);backdrop-filter:blur(14px);
             border-bottom:1px solid var(--border);position:sticky;top:0;z-index:1000;
+            transition:box-shadow .25s,border-color .25s;
         }
-        .nav-wrap{display:flex;align-items:center;gap:.75rem;height:66px;min-width:0}
+        header.site-header.scrolled{box-shadow:0 12px 30px -20px rgba(8,61,39,.45);border-color:#dbe6df}
+        .nav-wrap{display:flex;align-items:center;gap:.75rem;height:62px;min-width:0}
         .brand{display:flex;align-items:center;gap:.6rem;font-weight:800;font-size:1.25rem;letter-spacing:-.03em;color:var(--primary);flex-shrink:0}
-        .brand .logo{width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,var(--primary),var(--emerald));display:grid;place-items:center;color:#fff;flex-shrink:0;box-shadow:0 6px 14px rgba(11,93,59,.28)}
+        .brand .logo{width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,var(--primary),var(--emerald));display:grid;place-items:center;color:#fff;flex-shrink:0;box-shadow:0 6px 14px rgba(11,93,59,.28);transition:transform .25s}
+        .brand:hover .logo{transform:rotate(-4deg) scale(1.05)}
         .brand .logo svg{width:22px;height:22px}
         .brand-text{white-space:nowrap}
         .brand span em{color:var(--emerald);font-style:normal}
@@ -116,9 +119,10 @@
         .mobile-search input{width:100%;padding:.65rem .9rem .65rem 2.35rem;border:1px solid var(--border);border-radius:999px;background:#f6faf8;outline:none;transition:.2s}
         .mobile-search input:focus{border-color:var(--emerald);background:#fff;box-shadow:0 0 0 4px rgba(16,185,129,.12)}
         .mobile-links{display:flex;flex-direction:column}
-        .mobile-links>a{display:flex;align-items:center;justify-content:space-between;gap:.5rem;padding:.62rem .55rem;border-radius:9px;font-size:.92rem;font-weight:500;color:#334155;transition:.16s}
+        .mobile-links>a{display:flex;align-items:center;justify-content:space-between;gap:.5rem;padding:.52rem .55rem;border-radius:9px;font-size:.89rem;font-weight:500;color:#334155;transition:.16s}
         .mobile-links>a:hover{background:var(--emerald-soft);color:var(--primary)}
-        .mobile-links>form>button{display:block;width:100%;text-align:left;padding:.62rem .55rem;border-radius:9px;font-size:.92rem;font-weight:600;color:var(--danger);background:none;border:none;transition:.16s}
+        .mobile-links>form>button{display:block;width:100%;text-align:left;padding:.52rem .55rem;border-radius:9px;font-size:.89rem;font-weight:600;color:var(--danger);background:none;border:none;transition:.16s}
+        .mobile-group{display:block;padding:.75rem .55rem .2rem;font-size:.66rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
         .mobile-links>form>button:hover{background:#fee2e2}
         .mobile-sep{height:1px;background:var(--border);margin:.4rem .1rem}
         .mobile-count{background:var(--emerald-soft);color:var(--primary);font-size:.72rem;font-weight:700;border-radius:999px;padding:.1rem .5rem}
@@ -154,6 +158,29 @@
            initial hidden state applies before paint and never flashes. */
         .has-js .reveal{opacity:0;transform:translateY(26px);transition:opacity .75s cubic-bezier(.22,1,.36,1),transform .75s cubic-bezier(.22,1,.36,1);transition-delay:var(--d,0ms)}
         .has-js .reveal.in{opacity:1;transform:none}
+
+        /* Campus tile — shared by the home strip and the campus directory */
+        .campus-tile{
+            position:relative;overflow:hidden;display:flex;flex-direction:column;gap:.7rem;padding:1.2rem;
+            transition:transform .3s cubic-bezier(.22,1,.36,1),box-shadow .3s,border-color .3s;
+        }
+        .campus-tile .bar{position:absolute;top:0;bottom:0;left:0;width:4px;transform:scaleY(.35);transform-origin:top;
+            background:linear-gradient(180deg,var(--emerald),var(--primary));transition:transform .45s cubic-bezier(.22,1,.36,1)}
+        .campus-tile:hover{transform:translateY(-5px);border-color:#c7e6d6;box-shadow:0 24px 48px -26px rgba(11,93,59,.42)}
+        .campus-tile:hover .bar{transform:scaleY(1)}
+        .tile-top{display:flex;align-items:flex-start;gap:.7rem}
+        .tile-mono{width:42px;height:42px;border-radius:12px;flex-shrink:0;display:grid;place-items:center;
+            background:linear-gradient(135deg,var(--primary),var(--emerald));color:#fff;
+            font-weight:800;font-size:.74rem;letter-spacing:.02em;transition:transform .35s}
+        .campus-tile:hover .tile-mono{transform:scale(1.06) rotate(-3deg)}
+        .tile-id{min-width:0;flex:1}
+        .tile-id b{display:block;font-size:.94rem;line-height:1.3}
+        .tile-meta{display:block;font-size:.75rem;color:var(--muted);margin-top:.15rem}
+        .tile-end{display:inline-flex;align-items:center;gap:.35rem;flex-shrink:0;margin-left:auto}
+        .tile-arrow{width:15px;height:15px;color:var(--emerald);opacity:0;transform:translateX(-5px);transition:.3s}
+        .campus-tile:hover .tile-arrow{opacity:1;transform:none}
+        .tile-loc{display:inline-flex;align-items:center;gap:.35rem;font-size:.78rem;color:#475569}
+        .tile-loc svg{width:14px;height:14px;color:var(--emerald);flex-shrink:0}
 
         /* Forms */
         .field{display:flex;flex-direction:column;gap:.35rem;margin-bottom:1rem}
@@ -236,13 +263,24 @@
         .pager .disabled span{opacity:.45}
 
         /* Footer */
-        footer.site-footer{background:#08301f;color:#c9ddd3;margin-top:auto}
-        .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:2rem;padding:2.5rem 0 1.5rem}
-        footer.site-footer h4{color:#fff;font-size:.9rem;margin-bottom:.8rem}
-        footer.site-footer a{display:block;padding:.22rem 0;font-size:.85rem;color:#a9c7b8}
-        footer.site-footer a:hover{color:#fff}
+        footer.site-footer{position:relative;overflow:hidden;background:#062a1a;color:#c9ddd3;margin-top:auto}
+        footer.site-footer::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;
+            background:linear-gradient(90deg,var(--primary),var(--emerald),var(--primary-light))}
+        footer.site-footer::after{content:"";position:absolute;right:-170px;top:-220px;width:540px;height:540px;border-radius:50%;
+            background:radial-gradient(circle,rgba(16,185,129,.16),transparent 68%);pointer-events:none}
+        .footer-grid{position:relative;z-index:1;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:2.2rem;padding:2.6rem 0 1.6rem}
+        footer.site-footer h4{color:#fff;font-size:.76rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.9rem}
+        footer.site-footer a{display:block;padding:.22rem 0;font-size:.85rem;color:#a9c7b8;transition:color .2s,transform .2s}
+        footer.site-footer a:hover{color:#fff;transform:translateX(3px)}
         footer .brand{color:#fff}
-        .footer-bottom{border-top:1px solid rgba(255,255,255,.12);padding:1rem 0;font-size:.8rem;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+        .footer-about{max-width:330px;color:#8fb3a3;font-size:.82rem;line-height:1.6}
+        .footer-cod{margin-top:.9rem}
+        .footer-bottom{position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.12);padding:1.05rem 0;font-size:.8rem;
+            display:flex;justify-content:space-between;align-items:center;gap:.8rem;flex-wrap:wrap}
+        .footer-legal{display:flex;gap:1.1rem;flex-wrap:wrap}
+        footer.site-footer a.to-top{display:inline-flex;align-items:center;gap:.35rem;color:#a9c7b8}
+        footer.site-footer a.to-top:hover{color:#fff;transform:none}
+        footer.site-footer a.to-top svg{width:14px;height:14px}
         .cod-note{display:inline-flex;align-items:center;gap:.45rem;background:rgba(16,185,129,.16);color:#7fe3bd;padding:.3rem .7rem;border-radius:999px;font-size:.78rem;font-weight:600}
 
         .hero{background:linear-gradient(135deg,#083d27,#0b5d3b 45%,#127a4e);color:#fff;border-radius:20px;padding:2.6rem;position:relative;overflow:hidden}
@@ -286,6 +324,46 @@
             .page-stats .s + .s{padding-left:1.1rem;margin-left:1.1rem}
             .page-stats .s b{font-size:1.15rem}
             .page-stats .s span{font-size:.66rem}
+            .campus-tile{padding:1rem;gap:.6rem;border-radius:14px}
+            .campus-tile:hover{transform:none;box-shadow:none;border-color:var(--border)}
+            .campus-tile:hover .tile-mono{transform:none}
+            .campus-tile .bar{transform:scaleY(1)}
+            .tile-mono{width:38px;height:38px;border-radius:11px;font-size:.68rem}
+            .tile-id b{font-size:.89rem}
+            .tile-arrow{display:none}
+            /* Home "Popular campuses" stays short: one compact row per campus,
+               no location line, tighter vertical rhythm so the list stays short. */
+            .campus-strip{gap:.5rem}
+            .campus-strip .campus-tile{padding:.7rem .95rem;gap:0;border-radius:13px}
+            .campus-strip .tile-mono{width:34px;height:34px;border-radius:9px;font-size:.65rem}
+            .campus-strip .tile-id b{font-size:.88rem}
+            .campus-strip .tile-loc{display:none}
+            .campus-strip .tile-meta{font-size:.71rem;margin-top:.05rem}
+            .pill-long{display:none}
+
+            /* ---------- Navbar: short and clean ---------- */
+            .nav-wrap{height:56px;gap:.5rem}
+            .brand{font-size:1.06rem;gap:.5rem}
+            .brand .logo{width:32px;height:32px;border-radius:9px}
+            .brand .logo svg{width:19px;height:19px}
+            .mobile-toggle{width:38px;height:38px}
+            .mobile-nav{margin-top:0;padding:.6rem 0 .35rem}
+            .mobile-search{margin-bottom:.45rem}
+            .mobile-search input{padding:.55rem .85rem .55rem 2.2rem;font-size:.86rem}
+            .mobile-group{padding:.6rem .55rem .15rem}
+
+            /* ---------- Footer: short and minimal ---------- */
+            footer.site-footer::after{display:none}
+            .footer-grid{grid-template-columns:1fr 1fr;gap:1.2rem 1.1rem;padding:1.5rem 0 1.1rem}
+            .footer-cod{margin-top:.6rem}
+            .footer-grid>div:first-child{grid-column:1/-1}
+            .footer-about{max-width:none;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+            footer.site-footer h4{font-size:.7rem;margin-bottom:.55rem}
+            footer.site-footer a{font-size:.82rem;padding:.18rem 0}
+            footer.site-footer a:hover{transform:none}
+            .footer-bottom{padding:.85rem 0;font-size:.74rem;gap:.45rem}
+            .footer-legal{gap:.9rem}
+
             .filters{grid-template-columns:1fr 1fr}
             .hero h1{font-size:1.55rem}
         }
@@ -299,6 +377,8 @@
         @media (max-width:480px){
             .grid-4,.grid-2{grid-template-columns:1fr}
             .grid.product-grid{grid-template-columns:repeat(2,1fr);gap:.7rem}
+            /* The footer deliberately keeps its two link columns on phones
+               (the 1fr override was removed) instead of stacking four rows. */
             .product-grid .product-body{padding:.6rem .65rem .7rem;gap:.3rem}
             .product-grid .product-title{font-size:.82rem;line-height:1.35;min-height:2.7em}
             .product-grid .product-price{font-size:.98rem}
@@ -308,7 +388,6 @@
             .product-grid .row-between{gap:.4rem}
             .product-grid .btn-sm{padding:.34rem .55rem;font-size:.72rem}
             .filters{grid-template-columns:1fr}
-            .footer-grid{grid-template-columns:1fr}
         }
         @media (prefers-reduced-motion:reduce){
             *{transition:none!important;animation:none!important}
@@ -317,7 +396,7 @@
     </style>
     @stack('styles')
 </head>
-<body>
+<body id="top">
     @include('partials.nav')
 
     @stack('fullbleed-top')
@@ -345,6 +424,12 @@
                 menu.classList.toggle('open');
             });
         });
+        var header = document.querySelector('.site-header');
+        if (header) {
+            var onScroll = function () { header.classList.toggle('scrolled', window.scrollY > 6); };
+            onScroll();
+            window.addEventListener('scroll', onScroll, { passive: true });
+        }
         var mt = document.getElementById('mobileToggle');
         var mn = document.getElementById('mobileNav');
         if (mt && mn) {
