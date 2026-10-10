@@ -91,10 +91,10 @@ Route::middleware('auth')->group(function () {
 
     /*
     |----------------------------------------------------------------------
-    | Verified-student-only routes (buying, selling, messaging)
+    | Marketplace & order routes (verified students; administrators allowed)
     |----------------------------------------------------------------------
     */
-    Route::middleware(['verified.student', 'not.admin'])->group(function () {
+    Route::middleware('verified.student')->group(function () {
         // Wishlist
         Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
         Route::post('/wishlist/{product}', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
