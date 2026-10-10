@@ -18,9 +18,10 @@ class HomeController extends Controller
             ->take(8)
             ->get();
 
+        // Capped at 8 so the 4-column "Shop by category" grid fills two even rows.
         $categories = Category::active()->withCount(['products' => function ($query) {
             $query->where('status', 'active');
-        }])->get();
+        }])->take(8)->get();
 
         $campuses = Campus::active()->withCount(['products' => function ($query) {
             $query->where('status', 'active');
