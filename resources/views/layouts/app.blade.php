@@ -7,6 +7,7 @@
     <title>@yield('title', 'CampusBazar') · Buy Smart. Sell Easy. Campus Connected.</title>
     <meta name="description" content="CampusBazar is a student-only marketplace for colleges and universities in Bangladesh. Buy and sell used textbooks, electronics, hostel essentials and more with Cash on Delivery.">
     @stack('meta')
+    <script>document.documentElement.classList.add('has-js');</script>
     <style>
         :root{
             --primary:#0b5d3b;
@@ -149,6 +150,11 @@
         .product-price{font-weight:800;color:var(--primary);font-size:1.15rem}
         .product-meta{display:flex;justify-content:space-between;align-items:center;gap:.5rem;margin-top:auto;padding-top:.5rem;border-top:1px dashed var(--border);font-size:.78rem;color:var(--muted)}
 
+        /* Scroll reveal — opt-in via .reveal. .has-js is set from the head so the
+           initial hidden state applies before paint and never flashes. */
+        .has-js .reveal{opacity:0;transform:translateY(26px);transition:opacity .75s cubic-bezier(.22,1,.36,1),transform .75s cubic-bezier(.22,1,.36,1);transition-delay:var(--d,0ms)}
+        .has-js .reveal.in{opacity:1;transform:none}
+
         /* Forms */
         .field{display:flex;flex-direction:column;gap:.35rem;margin-bottom:1rem}
         .field label{font-weight:600;font-size:.85rem}
@@ -243,6 +249,12 @@
             .mobile-nav.open{display:block}
             .grid-3,.grid-2{grid-template-columns:1fr}
             .grid-4{grid-template-columns:repeat(2,1fr)}
+            /* .grid-4 is only ~216px per card between 481px and 760px, so dial the
+               product card down a notch. Keeps type monotonic across 480px. */
+            .product-grid .product-body{padding:.8rem .85rem .9rem}
+            .product-grid .product-title{font-size:.88rem}
+            .product-grid .product-price{font-size:1.05rem}
+            .product-grid .btn-sm{padding:.36rem .6rem;font-size:.75rem}
             .filters{grid-template-columns:1fr 1fr}
             .hero h1{font-size:1.55rem}
         }
@@ -250,12 +262,27 @@
             .brand{font-size:1.1rem}
             .nav-login,.nav-register{display:none}
         }
+        /* .grid-4 falls to a single full-width card per row on phones, which makes
+           a page of product cards several times longer to scroll. Product grids
+           keep two compact columns instead. */
         @media (max-width:480px){
             .grid-4,.grid-2{grid-template-columns:1fr}
+            .grid.product-grid{grid-template-columns:repeat(2,1fr);gap:.7rem}
+            .product-grid .product-body{padding:.6rem .65rem .7rem;gap:.3rem}
+            .product-grid .product-title{font-size:.82rem;line-height:1.35;min-height:2.7em}
+            .product-grid .product-price{font-size:.98rem}
+            .product-grid .product-meta{display:none}
+            .product-grid .thumb-badges{gap:.25rem}
+            .product-grid .thumb-badges .pill{font-size:.6rem;padding:.16rem .42rem}
+            .product-grid .row-between{gap:.4rem}
+            .product-grid .btn-sm{padding:.34rem .55rem;font-size:.72rem}
             .filters{grid-template-columns:1fr}
             .footer-grid{grid-template-columns:1fr}
         }
-        @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+        @media (prefers-reduced-motion:reduce){
+            *{transition:none!important;animation:none!important}
+            .has-js .reveal{opacity:1!important;transform:none!important}
+        }
     </style>
     @stack('styles')
 </head>
@@ -302,6 +329,26 @@
                 });
             });
         }
+
+        /* Scroll reveal (shared) */
+        (function () {
+            var reveals = document.querySelectorAll('.reveal');
+            if (!reveals.length) return;
+            var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (reduce || !('IntersectionObserver' in window)) {
+                reveals.forEach(function (el) { el.classList.add('in'); });
+                return;
+            }
+            var io = new IntersectionObserver(function (entries) {
+                entries.forEach(function (entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('in');
+                        io.unobserve(entry.target);
+                    }
+                });
+            }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+            reveals.forEach(function (el) { io.observe(el); });
+        })();
     </script>
     @stack('scripts')
 </body>
