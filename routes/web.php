@@ -110,13 +110,19 @@ Route::middleware('auth')->group(function () {
         Route::post('/orders/{order}/cancel', [OrderController::class, 'cancel'])->name('orders.cancel');
         Route::post('/orders/{order}/review', [ReviewController::class, 'store'])->name('orders.review');
 
-        // Messaging
+    });
+
+    /*
+    |----------------------------------------------------------------------
+    | Messaging (verified students; administrators allowed for oversight)
+    |----------------------------------------------------------------------
+    */
+    Route::middleware('verified.student')->group(function () {
         Route::get('/messages', [ConversationController::class, 'index'])->name('messages.index');
         Route::post('/messages/start/{product}', [ConversationController::class, 'start'])->name('messages.start');
         Route::get('/messages/{conversation}', [ConversationController::class, 'show'])->name('messages.show');
         Route::post('/messages/{conversation}', [ConversationController::class, 'storeMessage'])->name('messages.store');
         Route::post('/messages/{conversation}/report', [ConversationController::class, 'report'])->name('messages.report');
-
     });
 
     /*
