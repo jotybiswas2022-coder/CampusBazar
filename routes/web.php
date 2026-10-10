@@ -37,8 +37,6 @@ Route::get('/product/{product}', [ProductController::class, 'show'])->name('prod
 Route::get('/campuses', [CampusController::class, 'index'])->name('campuses.index');
 Route::get('/campuses/{campus}', [CampusController::class, 'show'])->name('campuses.show');
 
-Route::get('/seller/{user}', [SellerController::class, 'show'])->name('sellers.show');
-
 Route::get('/about', [PageController::class, 'about'])->name('about');
 Route::get('/terms', [PageController::class, 'terms'])->name('terms');
 Route::get('/privacy', [PageController::class, 'privacy'])->name('privacy');
@@ -119,22 +117,37 @@ Route::middleware('auth')->group(function () {
         Route::post('/messages/{conversation}', [ConversationController::class, 'storeMessage'])->name('messages.store');
         Route::post('/messages/{conversation}/report', [ConversationController::class, 'report'])->name('messages.report');
 
-        // Seller area
-        Route::prefix('seller')->name('seller.')->group(function () {
-            Route::get('/dashboard', [\App\Http\Controllers\Seller\DashboardController::class, 'index'])->name('dashboard');
-            Route::get('/products', [\App\Http\Controllers\Seller\ProductController::class, 'index'])->name('products.index');
-            Route::get('/products/create', [\App\Http\Controllers\Seller\ProductController::class, 'create'])->name('products.create');
-            Route::post('/products', [\App\Http\Controllers\Seller\ProductController::class, 'store'])->name('products.store');
-            Route::get('/products/{product}/edit', [\App\Http\Controllers\Seller\ProductController::class, 'edit'])->name('products.edit');
-            Route::put('/products/{product}', [\App\Http\Controllers\Seller\ProductController::class, 'update'])->name('products.update');
-            Route::delete('/products/{product}', [\App\Http\Controllers\Seller\ProductController::class, 'destroy'])->name('products.destroy');
+    });
 
-            Route::get('/orders', [\App\Http\Controllers\Seller\OrderController::class, 'index'])->name('orders.index');
-            Route::get('/orders/{order}', [\App\Http\Controllers\Seller\OrderController::class, 'show'])->name('orders.show');
-            Route::patch('/orders/{order}/status', [\App\Http\Controllers\Seller\OrderController::class, 'updateStatus'])->name('orders.status');
-        });
+    /*
+    |----------------------------------------------------------------------
+    | Verified-student seller area (administrators allowed for oversight)
+    |----------------------------------------------------------------------
+    */
+    Route::middleware('verified.student')->prefix('seller')->name('seller.')->group(function () {
+        Route::get('/dashboard', [\App\Http\Controllers\Seller\DashboardController::class, 'index'])->name('dashboard');
+        Route::get('/products', [\App\Http\Controllers\Seller\ProductController::class, 'index'])->name('products.index');
+        Route::get('/products/create', [\App\Http\Controllers\Seller\ProductController::class, 'create'])->name('products.create');
+        Route::post('/products', [\App\Http\Controllers\Seller\ProductController::class, 'store'])->name('products.store');
+        Route::get('/products/{product}/edit', [\App\Http\Controllers\Seller\ProductController::class, 'edit'])->name('products.edit');
+        Route::put('/products/{product}', [\App\Http\Controllers\Seller\ProductController::class, 'update'])->name('products.update');
+        Route::delete('/products/{product}', [\App\Http\Controllers\Seller\ProductController::class, 'destroy'])->name('products.destroy');
+
+        Route::get('/orders', [\App\Http\Controllers\Seller\OrderController::class, 'index'])->name('orders.index');
+        Route::get('/orders/{order}', [\App\Http\Controllers\Seller\OrderController::class, 'show'])->name('orders.show');
+        Route::patch('/orders/{order}/status', [\App\Http\Controllers\Seller\OrderController::class, 'updateStatus'])->name('orders.status');
     });
 });
+
+/*
+|--------------------------------------------------------------------------
+| Public seller profile
+|--------------------------------------------------------------------------
+| Registered after the authenticated /seller/* area so this wildcard does
+| not shadow routes such as /seller/dashboard, /seller/products, /seller/orders.
+*/
+
+Route::get('/seller/{user}', [SellerController::class, 'show'])->name('sellers.show');
 
 /*
 |--------------------------------------------------------------------------

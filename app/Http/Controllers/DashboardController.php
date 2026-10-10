@@ -12,10 +12,6 @@ class DashboardController extends Controller
     {
         $user = $request->user();
 
-        if ($user->isAdmin()) {
-            return redirect()->route('admin.dashboard');
-        }
-
         $data = [
             'user' => $user,
             'verification' => $user->latestVerificationRequest,
