@@ -18,7 +18,7 @@
                 <span class="logo">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5 12 4l9 5.5-9 5.5z"/><path d="M7 12v6c0 .6.16 1 .5 1.3L12 22l4.5-2.7c.34-.3.5-.7.5-1.3v-6"/></svg>
                 </span>
-                <span>Campus<em>Bazar</em></span>
+                <span class="brand-text">Campus<em>Bazar</em></span>
             </a>
 
             <form class="nav-search" action="{{ route('marketplace.index') }}" method="GET" role="search">
@@ -39,43 +39,45 @@
 
             <div class="nav-right">
                 @auth
-                    <a class="icon-btn" href="{{ route('wishlist.index') }}" title="Wishlist">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 1 0-7.8 7.8l8.8 8.8 8.8-8.8a5.5 5.5 0 0 0 0-7.8z"/></svg>
-                        @if($wishCount > 0)<span class="badge-dot">{{ $wishCount > 9 ? '9+' : $wishCount }}</span>@endif
-                    </a>
-                    <a class="icon-btn" href="{{ route('messages.index') }}" title="Messages">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-                        @if($unreadMessages > 0)<span class="badge-dot">{{ $unreadMessages > 9 ? '9+' : $unreadMessages }}</span>@endif
-                    </a>
-                    <a class="icon-btn" href="{{ route('orders.index') }}" title="Orders">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-                    </a>
-                    <div class="menu">
-                        <button class="icon-btn" data-menu-toggle title="Notifications" aria-haspopup="true">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
-                            @if($unreadNotifs > 0)<span class="badge-dot">{{ $unreadNotifs > 9 ? '9+' : $unreadNotifs }}</span>@endif
-                        </button>
-                        <div class="menu-panel">
-                            <div style="padding:.6rem .7rem;font-weight:700;font-size:.8rem;color:var(--muted)">Notifications</div>
-                            @forelse($u->notifications()->latest()->take(3)->get() as $n)
-                                <a href="{{ route('notifications.read', $n->id) }}">
-                                    <span>{{ $n->data['title'] ?? 'Notification' }}</span>
-                                </a>
-                            @empty
-                                <div style="padding:.6rem .7rem;font-size:.83rem;color:var(--muted)">No notifications yet.</div>
-                            @endforelse
-                            <div class="menu-sep"></div>
-                            <a href="{{ route('notifications.index') }}">View all notifications</a>
+                    <div class="nav-actions">
+                        <a class="icon-btn" href="{{ route('wishlist.index') }}" title="Wishlist" aria-label="Wishlist">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 1 0-7.8 7.8l8.8 8.8 8.8-8.8a5.5 5.5 0 0 0 0-7.8z"/></svg>
+                            @if($wishCount > 0)<span class="badge-dot">{{ $wishCount > 9 ? '9+' : $wishCount }}</span>@endif
+                        </a>
+                        <a class="icon-btn" href="{{ route('messages.index') }}" title="Messages" aria-label="Messages">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                            @if($unreadMessages > 0)<span class="badge-dot">{{ $unreadMessages > 9 ? '9+' : $unreadMessages }}</span>@endif
+                        </a>
+                        <a class="icon-btn" href="{{ route('orders.index') }}" title="Orders" aria-label="Orders">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                        </a>
+                        <div class="menu">
+                            <button class="icon-btn" type="button" data-menu-toggle title="Notifications" aria-label="Notifications" aria-haspopup="true">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+                                @if($unreadNotifs > 0)<span class="badge-dot">{{ $unreadNotifs > 9 ? '9+' : $unreadNotifs }}</span>@endif
+                            </button>
+                            <div class="menu-panel">
+                                <div style="padding:.6rem .7rem;font-weight:700;font-size:.8rem;color:var(--muted)">Notifications</div>
+                                @forelse($u->notifications()->latest()->take(3)->get() as $n)
+                                    <a href="{{ route('notifications.read', $n->id) }}">
+                                        <span>{{ $n->data['title'] ?? 'Notification' }}</span>
+                                    </a>
+                                @empty
+                                    <div style="padding:.6rem .7rem;font-size:.83rem;color:var(--muted)">No notifications yet.</div>
+                                @endforelse
+                                <div class="menu-sep"></div>
+                                <a href="{{ route('notifications.index') }}">View all notifications</a>
+                            </div>
                         </div>
                     </div>
 
-                    <a class="btn btn-primary" href="{{ route('seller.products.create') }}">
+                    <a class="btn btn-primary nav-sell" href="{{ route('seller.products.create') }}">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
-                        Sell Item
+                        <span class="nav-sell-text">Sell Item</span>
                     </a>
 
                     <div class="menu">
-                        <button class="row" data-menu-toggle style="background:none;border:none;padding:0;gap:.5rem" aria-haspopup="true">
+                        <button class="row avatar-btn" type="button" data-menu-toggle aria-haspopup="true" aria-label="Account menu">
                             <span class="avatar">{{ $u->initials() }}</span>
                         </button>
                         <div class="menu-panel">
@@ -101,24 +103,52 @@
                             </form>
                         </div>
                     </div>
-
-                    <button class="icon-btn mobile-toggle" id="mobileToggle" aria-label="Menu">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
-                    </button>
                 @else
-                    <a class="btn btn-outline" href="{{ route('login') }}">Log in</a>
-                    <a class="btn btn-primary" href="{{ route('register') }}">Register</a>
+                    <a class="btn btn-outline nav-login" href="{{ route('login') }}">Log in</a>
+                    <a class="btn btn-primary nav-register" href="{{ route('register') }}">Register</a>
                 @endauth
+
+                <button class="icon-btn mobile-toggle" id="mobileToggle" type="button" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobileNav">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+                </button>
             </div>
         </div>
 
-        <nav id="mobileNav" class="container" style="padding-bottom:1rem" aria-label="Mobile">
-            <a class="navlink" href="{{ route('marketplace.index') }}">Marketplace</a>
-            <a class="navlink" href="{{ route('campuses.index') }}">Campus Directory</a>
-            @auth
-                <a class="navlink" href="{{ route('dashboard') }}">Dashboard</a>
-                <a class="navlink" href="{{ route('seller.products.create') }}">Sell Item</a>
-            @endauth
+        <nav id="mobileNav" class="mobile-nav" aria-label="Mobile">
+            <form class="mobile-search" action="{{ route('marketplace.index') }}" method="GET" role="search">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+                <input type="search" name="q" value="{{ request('q') }}" placeholder="Search CampusBazar…" aria-label="Search products">
+            </form>
+
+            <div class="mobile-links">
+                <a href="{{ route('marketplace.index') }}"><span>Marketplace</span></a>
+                <a href="{{ route('campuses.index') }}"><span>Campus Directory</span></a>
+
+                @auth
+                    <div class="mobile-sep"></div>
+                    <a href="{{ route('wishlist.index') }}"><span>Wishlist</span>@if($wishCount > 0)<span class="mobile-count">{{ $wishCount }}</span>@endif</a>
+                    <a href="{{ route('messages.index') }}"><span>Messages</span>@if($unreadMessages > 0)<span class="mobile-count">{{ $unreadMessages }}</span>@endif</a>
+                    <a href="{{ route('orders.index') }}"><span>Orders</span></a>
+                    <a href="{{ route('notifications.index') }}"><span>Notifications</span>@if($unreadNotifs > 0)<span class="mobile-count">{{ $unreadNotifs }}</span>@endif</a>
+                    <a href="{{ route('seller.products.create') }}"><span>Sell an item</span></a>
+                    <div class="mobile-sep"></div>
+                    @if($u->isAdmin())
+                        <a href="{{ route('admin.dashboard') }}"><span>Admin Dashboard</span></a>
+                    @endif
+                    <a href="{{ route('dashboard') }}"><span>Dashboard</span></a>
+                    <a href="{{ route('seller.dashboard') }}"><span>Seller Dashboard</span></a>
+                    <a href="{{ route('verification.status') }}"><span>ID Verification</span></a>
+                    <a href="{{ route('profile.edit') }}"><span>Account Settings</span></a>
+                    <form action="{{ route('logout') }}" method="POST">
+                        @csrf
+                        <button type="submit">Log out</button>
+                    </form>
+                @else
+                    <div class="mobile-sep"></div>
+                    <a href="{{ route('login') }}"><span>Log in</span></a>
+                    <a href="{{ route('register') }}"><span>Create account</span></a>
+                @endauth
+            </div>
         </nav>
     </div>
 </header>
