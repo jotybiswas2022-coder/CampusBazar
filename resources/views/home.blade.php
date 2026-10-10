@@ -221,6 +221,33 @@
         .cta-band p{font-size:.87rem}
         .cta-band .btn{width:100%;justify-content:center}
     }
+    /* .grid-4 is already two columns between 481px and 760px, but the card is
+       only ~216px wide there, so dial it down a notch. This tier exists to keep
+       type sizes monotonic across the 480px boundary below. */
+    @media (max-width:760px){
+        .featured-grid .product-body{padding:.8rem .85rem .9rem}
+        .featured-grid .product-title{font-size:.88rem}
+        .featured-grid .product-price{font-size:1.05rem}
+        .featured-grid .btn-sm{padding:.36rem .6rem;font-size:.75rem}
+    }
+
+    /* ---------- "Recently listed" grid on phones ----------
+       The shared .grid-4 collapses to a single full-width card per row below
+       480px, which stacks the four listings into ~2000px of scrolling. Keep two
+       compact columns here instead; scoped to this section so the dashboards,
+       wishlist and marketplace grids that share .grid-4 are left alone. */
+    @media (max-width:480px){
+        .grid.featured-grid{grid-template-columns:repeat(2,1fr);gap:.7rem}
+        .featured-grid .product-body{padding:.6rem .65rem .7rem;gap:.3rem}
+        .featured-grid .product-title{font-size:.82rem;line-height:1.35;min-height:2.7em}
+        .featured-grid .product-price{font-size:.98rem}
+        .featured-grid .product-meta{display:none}
+        .featured-grid .thumb-badges{gap:.25rem}
+        .featured-grid .thumb-badges .pill{font-size:.6rem;padding:.16rem .42rem}
+        .featured-grid .row-between{gap:.4rem}
+        .featured-grid .btn-sm{padding:.34rem .55rem;font-size:.72rem}
+    }
+
     @media (max-width:400px){
         .home-hero h1{font-size:1.6rem}
         .hero-strip .hs b{font-size:1.05rem}
@@ -357,7 +384,7 @@
             <p>Be the first to list an item on CampusBazar.</p>
         </div>
     @else
-        <div class="grid grid-4">
+        <div class="grid grid-4 featured-grid">
             @foreach($featured as $product)
                 @include('partials.product-card', ['product' => $product, 'revealDelay' => min($loop->index, 7) * 55])
             @endforeach
