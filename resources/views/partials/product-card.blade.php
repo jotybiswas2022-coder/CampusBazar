@@ -2,7 +2,7 @@
     $image = $product->images->first();
     $sellerName = $product->seller->name ?? 'Student';
 @endphp
-<article class="card card-hover product-card">
+<article class="card card-hover product-card{{ isset($revealDelay) ? ' reveal' : '' }}"@isset($revealDelay) style="--d:{{ $revealDelay }}ms"@endisset>
     <a href="{{ route('products.show', $product) }}" class="product-thumb" aria-label="{{ $product->title }}">
         @if($image)
             <img src="{{ $image->url }}" alt="{{ $product->title }}" loading="lazy">
