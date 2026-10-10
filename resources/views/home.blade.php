@@ -4,88 +4,79 @@
 @push('styles')
 <style>
     /* ============================================================
-       Home — hero
+       Home — full-bleed editorial hero
        ============================================================ */
     .home-hero{
-        position:relative;isolation:isolate;overflow:hidden;color:#fff;
-        border-radius:28px;padding:3.2rem 3rem 2.9rem;
-        background:linear-gradient(135deg,#052a1a 0%,#083d27 42%,#0b5d3b 100%);
-        box-shadow:0 34px 80px -34px rgba(8,61,39,.8);
+        position:relative;isolation:isolate;overflow:hidden;color:#fff;text-align:center;
+        padding:4.6rem 1rem 5.6rem;
+        background:linear-gradient(165deg,#041f14 0%,#07331f 54%,#0a4a2e 100%);
     }
-    .home-hero .aura{position:absolute;border-radius:50%;filter:blur(70px);opacity:.5;z-index:0;pointer-events:none}
-    .home-hero .a1{width:420px;height:420px;left:-140px;top:-170px;background:radial-gradient(circle,#10b981,transparent 70%);animation:auraA 18s ease-in-out infinite}
-    .home-hero .a2{width:380px;height:380px;right:-120px;top:-70px;background:radial-gradient(circle,#34d399,transparent 70%);animation:auraB 22s ease-in-out infinite}
-    .home-hero .a3{width:460px;height:460px;right:18%;bottom:-320px;background:radial-gradient(circle,#059669,transparent 70%);animation:auraA 26s ease-in-out infinite reverse}
-    .home-hero .hero-dots{
-        position:absolute;inset:0;z-index:1;pointer-events:none;opacity:.5;
-        background-image:radial-gradient(rgba(255,255,255,.16) 1px,transparent 1px);
-        background-size:26px 26px;
-        -webkit-mask-image:radial-gradient(120% 90% at 15% 0%,#000,transparent 66%);
-        mask-image:radial-gradient(120% 90% at 15% 0%,#000,transparent 66%);
+    .home-hero .hero-glow{
+        position:absolute;left:50%;top:-42%;width:min(1180px,130vw);height:min(1180px,130vw);
+        transform:translateX(-50%);border-radius:50%;z-index:0;pointer-events:none;
+        background:radial-gradient(circle,rgba(16,185,129,.3),rgba(16,185,129,.07) 46%,transparent 68%);
     }
+    .home-hero .hero-lines{
+        position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.55;
+        background-image:linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px);
+        background-size:64px 64px;
+        -webkit-mask-image:radial-gradient(88% 72% at 50% 8%,#000,transparent 74%);
+        mask-image:radial-gradient(88% 72% at 50% 8%,#000,transparent 74%);
+    }
+    .home-hero .hero-sweep{
+        position:absolute;top:-40%;left:-35%;width:55%;height:180%;z-index:0;pointer-events:none;
+        background:linear-gradient(90deg,transparent,rgba(52,211,153,.15),transparent);
+        filter:blur(26px);transform:rotate(16deg);
+        animation:sweep 18s ease-in-out infinite;
+    }
+    @keyframes sweep{0%,100%{transform:translateX(0) rotate(16deg)}50%{transform:translateX(140vw) rotate(16deg)}}
     @keyframes auraA{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(32px,26px) scale(1.12)}}
     @keyframes auraB{0%,100%{transform:translate(0,0) scale(1.05)}50%{transform:translate(-36px,20px) scale(.94)}}
 
-    .hero-main{position:relative;z-index:2;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.85fr);gap:2.4rem;align-items:center}
+    .hero-inner{position:relative;z-index:2;max-width:840px;margin:0 auto}
 
     .hero-badge{display:inline-flex;align-items:center;gap:.5rem;padding:.4rem .85rem;border-radius:999px;background:rgba(16,185,129,.16);border:1px solid rgba(52,211,153,.32);color:#8ff0c6;font-size:.78rem;font-weight:600;letter-spacing:.02em}
     .hero-badge .dot{width:7px;height:7px;border-radius:50%;background:#34d399;animation:pulseDot 2.2s infinite}
     @keyframes pulseDot{0%{box-shadow:0 0 0 0 rgba(52,211,153,.65)}70%{box-shadow:0 0 0 9px rgba(52,211,153,0)}100%{box-shadow:0 0 0 0 rgba(52,211,153,0)}}
 
-    .hero-copy h1{font-size:3rem;line-height:1.06;letter-spacing:-.035em;font-weight:800;max-width:14ch;margin-top:1.05rem}
-    .hero-copy h1 .grad{background:linear-gradient(100deg,#6ee7b7,#34d399 45%,#a7f3d0);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
-    .hero-copy .lede{color:#bfe0d2;max-width:52ch;margin-top:1.05rem;font-size:1.02rem}
+    .home-hero h1{font-size:3.85rem;line-height:1.03;letter-spacing:-.04em;font-weight:800;margin-top:1.15rem}
+    .home-hero h1 .grad{background:linear-gradient(100deg,#6ee7b7,#34d399 45%,#a7f3d0);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+    .home-hero .lede{color:#bfe0d2;max-width:56ch;margin:1.15rem auto 0;font-size:1.06rem}
 
-    .hero-search{display:flex;align-items:center;gap:.5rem;margin-top:1.6rem;max-width:540px;padding:.35rem .35rem .35rem 1.05rem;border-radius:999px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.2);backdrop-filter:blur(10px);transition:.25s}
-    .hero-search:focus-within{border-color:rgba(52,211,153,.65);background:rgba(255,255,255,.14);box-shadow:0 0 0 5px rgba(16,185,129,.15)}
-    .hero-search>svg{width:18px;height:18px;color:#8ff0c6;flex-shrink:0}
-    .hero-search input{flex:1;min-width:0;border:none;outline:none;background:none;color:#fff;padding:.55rem 0;font-size:.95rem}
+    .hero-search{display:flex;align-items:center;gap:.55rem;margin:2.1rem auto 0;max-width:640px;padding:.45rem .45rem .45rem 1.25rem;border-radius:999px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.2);backdrop-filter:blur(10px);transition:.25s}
+    .hero-search:focus-within{border-color:rgba(52,211,153,.65);background:rgba(255,255,255,.15);box-shadow:0 0 0 5px rgba(16,185,129,.15)}
+    .hero-search>svg{width:19px;height:19px;color:#8ff0c6;flex-shrink:0}
+    .hero-search input{flex:1;min-width:0;border:none;outline:none;background:none;color:#fff;padding:.6rem 0;font-size:1rem}
     .hero-search input::placeholder{color:rgba(191,224,210,.72)}
-    .hero-search .go{padding:.55rem 1.15rem;border-radius:999px;border:none;background:linear-gradient(135deg,#10b981,#0b5d3b);color:#fff;font-weight:700;font-size:.85rem;white-space:nowrap;transition:.2s}
+    .hero-search .go{padding:.7rem 1.5rem;border-radius:999px;border:none;background:linear-gradient(135deg,#10b981,#0b5d3b);color:#fff;font-weight:700;font-size:.88rem;white-space:nowrap;transition:.2s}
     .hero-search .go:hover{filter:brightness(1.12)}
 
-    .hero-actions{display:flex;gap:.7rem;flex-wrap:wrap;margin-top:1.15rem}
+    .hero-actions{display:flex;gap:.7rem;flex-wrap:wrap;justify-content:center;margin-top:1.5rem}
+    .hero-actions .btn-primary{box-shadow:0 10px 26px -10px rgba(16,185,129,.6)}
     .hero-actions .btn-outline{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.28);color:#fff}
     .hero-actions .btn-outline:hover{border-color:#34d399;background:rgba(52,211,153,.14);color:#fff}
 
-    .hero-stats{display:flex;margin-top:1.9rem;flex-wrap:wrap;align-items:stretch}
-    .hero-stats .hs{display:flex;flex-direction:column;gap:.15rem;padding:0 1.5rem}
-    .hero-stats .hs:first-child{padding-left:0}
-    .hero-stats .hs + .hs{border-left:1px solid rgba(255,255,255,.16)}
-    .hero-stats .hs b{font-size:1.85rem;font-weight:800;letter-spacing:-.02em;color:#fff;line-height:1.1}
-    .hero-stats .hs span{font-size:.75rem;color:#a9cdbe;font-weight:500}
-
-    /* Floating preview card */
-    .hero-visual{position:relative;display:flex;align-items:center;justify-content:center;min-height:340px}
-    .hv-glow{position:absolute;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(52,211,153,.45),transparent 68%);filter:blur(28px)}
-    .hv-card{position:relative;width:265px;background:#fff;border-radius:20px;padding:.85rem;color:var(--text);box-shadow:0 34px 60px -22px rgba(0,0,0,.55);animation:floaty 7s ease-in-out infinite}
-    .hv-thumb{aspect-ratio:4/3;border-radius:14px;overflow:hidden;background:linear-gradient(135deg,#eef6f1,#dcefe5);display:grid;place-items:center;color:#9bb5a7}
-    .hv-thumb img{width:100%;height:100%;object-fit:cover}
-    .hv-thumb svg{width:46px;height:46px}
-    .hv-body{padding:.7rem .3rem .2rem;display:flex;flex-direction:column;gap:.35rem}
-    .hv-body b{font-size:.92rem;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-    .hv-price{font-weight:800;color:var(--primary);font-size:1.1rem}
-    .hv-chip{position:absolute;display:inline-flex;align-items:center;gap:.35rem;padding:.42rem .72rem;border-radius:999px;background:rgba(255,255,255,.97);color:#065f46;font-size:.73rem;font-weight:700;box-shadow:0 14px 28px -12px rgba(0,0,0,.55)}
-    .hv-chip svg{width:14px;height:14px}
-    .hv-chip-1{top:7%;left:2%;animation:floaty 5.5s ease-in-out infinite}
-    .hv-chip-2{bottom:13%;right:1%;animation:floaty 6.5s ease-in-out infinite .7s}
-    @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+    /* Floating stat card straddling the hero's bottom edge */
+    .hero-strip-wrap{position:relative;z-index:3;max-width:940px;margin:-2.7rem auto 0;padding:0 1rem;animation:riseIn .9s cubic-bezier(.22,1,.36,1) .32s both}
+    .hero-strip{display:grid;grid-template-columns:repeat(3,1fr);background:#fff;border:1px solid var(--border);border-radius:18px;overflow:hidden;box-shadow:0 26px 54px -30px rgba(8,61,39,.45)}
+    .hero-strip .hs{display:flex;flex-direction:column;align-items:center;gap:.12rem;padding:1.2rem 1rem}
+    .hero-strip .hs + .hs{border-left:1px solid var(--border)}
+    .hero-strip .hs b{font-size:1.7rem;font-weight:800;letter-spacing:-.02em;color:var(--primary);line-height:1.1}
+    .hero-strip .hs span{font-size:.76rem;color:var(--muted);font-weight:500}
 
     /* Hero entrances */
     @keyframes riseIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
-    .home-hero .hero-copy>*{animation:riseIn .85s cubic-bezier(.22,1,.36,1) both}
-    .home-hero .hero-copy>*:nth-child(2){animation-delay:.08s}
-    .home-hero .hero-copy>*:nth-child(3){animation-delay:.16s}
-    .home-hero .hero-copy>*:nth-child(4){animation-delay:.24s}
-    .home-hero .hero-copy>*:nth-child(5){animation-delay:.32s}
-    .home-hero .hero-copy>*:nth-child(6){animation-delay:.4s}
-    .home-hero .hero-visual{animation:riseIn 1s cubic-bezier(.22,1,.36,1) .25s both}
+    .hero-inner>*{animation:riseIn .85s cubic-bezier(.22,1,.36,1) both}
+    .hero-inner>*:nth-child(2){animation-delay:.08s}
+    .hero-inner>*:nth-child(3){animation-delay:.16s}
+    .hero-inner>*:nth-child(4){animation-delay:.24s}
+    .hero-inner>*:nth-child(5){animation-delay:.32s}
 
     /* ============================================================
        Trust marquee
        ============================================================ */
     .trust-strip{
-        margin-top:1rem;background:#fff;border:1px solid var(--border);border-radius:16px;padding:.85rem 0;overflow:hidden;
+        margin-top:1.6rem;background:#fff;border:1px solid var(--border);border-radius:16px;padding:.85rem 0;overflow:hidden;
         -webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);
         mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);
     }
@@ -164,12 +155,8 @@
        Responsive
        ============================================================ */
     @media (max-width:1000px){
-        .hero-copy h1{font-size:2.4rem}
+        .home-hero h1{font-size:2.9rem}
         .feature-grid{grid-template-columns:repeat(2,1fr)}
-    }
-    @media (max-width:900px){
-        .hero-main{grid-template-columns:1fr;gap:1.6rem}
-        .hero-visual{display:none}
     }
     @media (max-width:860px){
         .cat-grid{grid-template-columns:repeat(3,1fr)}
@@ -177,20 +164,21 @@
 
     /* ---------- Mobile: keep it minimal & clean ---------- */
     @media (max-width:760px){
-        .home-hero{padding:1.7rem 1.25rem 1.85rem;border-radius:20px;box-shadow:0 20px 44px -30px rgba(8,61,39,.7)}
-        .home-hero .aura,.home-hero .hero-dots{display:none}
+        .home-hero{padding:2.4rem 1.1rem 3.8rem}
+        .home-hero .hero-glow,.home-hero .hero-lines,.home-hero .hero-sweep{display:none}
         .hero-badge{font-size:.72rem;padding:.32rem .7rem}
-        .hero-copy h1{font-size:1.72rem;max-width:none;margin-top:.85rem;letter-spacing:-.03em}
-        .hero-copy .lede{font-size:.9rem;margin-top:.7rem}
-        .hero-search{margin-top:1.05rem;padding:.28rem .28rem .28rem .85rem;gap:.4rem}
-        .hero-search input{font-size:.88rem;padding:.5rem 0}
-        .hero-search .go{padding:.5rem .85rem;font-size:.8rem}
-        .hero-actions{margin-top:.95rem;gap:.55rem}
+        .home-hero h1{font-size:1.8rem;margin-top:.85rem;letter-spacing:-.03em}
+        .home-hero .lede{font-size:.9rem;margin-top:.75rem}
+        .hero-search{margin-top:1.25rem;padding:.3rem .3rem .3rem .9rem;gap:.4rem;max-width:none}
+        .hero-search input{font-size:.88rem;padding:.55rem 0}
+        .hero-search .go{padding:.55rem .95rem;font-size:.82rem}
+        .hero-actions{margin-top:1rem;gap:.55rem}
         .hero-actions .btn{flex:1 1 auto;justify-content:center}
-        .hero-stats{margin-top:1.35rem;gap:.7rem 0}
-        .hero-stats .hs{flex:1 1 30%;padding:0 .8rem}
-        .hero-stats .hs b{font-size:1.3rem}
-        .hero-stats .hs span{font-size:.68rem}
+        .hero-strip-wrap{margin-top:-2rem;padding:0 .9rem}
+        .hero-strip{border-radius:14px}
+        .hero-strip .hs{padding:.85rem .5rem}
+        .hero-strip .hs b{font-size:1.2rem}
+        .hero-strip .hs span{font-size:.65rem}
 
         /* decorative bits stay out of the way */
         .trust-strip{display:none}
@@ -234,16 +222,56 @@
         .cta-band .btn{width:100%;justify-content:center}
     }
     @media (max-width:400px){
-        .hero-stats .hs b{font-size:1.15rem}
-        .hero-stats .hs span{font-size:.63rem}
+        .home-hero h1{font-size:1.6rem}
+        .hero-strip .hs b{font-size:1.05rem}
+        .hero-strip .hs span{font-size:.6rem}
     }
 
     /* Reduced motion: nothing hidden, no looping animation */
     @media (prefers-reduced-motion:reduce){
         .has-js .reveal{opacity:1!important;transform:none!important}
-        .home-hero .aura,.trust-track,.hv-card,.hv-chip,.cta-band::before,.cta-band::after{animation:none!important}
+        .home-hero .hero-sweep,.trust-track,.cta-band::before,.cta-band::after{animation:none!important}
     }
 </style>
+@endpush
+
+@push('fullbleed-top')
+<section class="home-hero">
+    <span class="hero-glow"></span>
+    <span class="hero-lines"></span>
+    <span class="hero-sweep"></span>
+
+    <div class="hero-inner">
+        <span class="hero-badge"><span class="dot"></span> Student-only marketplace · Bangladesh</span>
+        <h1>Buy smart. Sell easy.<br><span class="grad">Stay campus connected.</span></h1>
+        <p class="lede">Textbooks, calculators, electronics and hostel essentials from verified students at your campus — all with Cash on Delivery.</p>
+
+        <form class="hero-search" action="{{ route('marketplace.index') }}" method="GET" role="search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+            <input type="search" name="q" value="{{ request('q') }}" placeholder="Search books, calculators, cycles…" aria-label="Search products">
+            <button class="go" type="submit">Search</button>
+        </form>
+
+        <div class="hero-actions">
+            <a class="btn btn-primary" href="{{ route('marketplace.index') }}">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l1-5h16l1 5"/><path d="M4 9v11h16V9"/><path d="M9 13h6"/></svg>
+                Browse Marketplace
+            </a>
+            <a class="btn btn-outline" href="{{ route('seller.products.create') }}">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+                Start Selling
+            </a>
+        </div>
+    </div>
+</section>
+
+<div class="hero-strip-wrap">
+    <div class="hero-strip">
+        <div class="hs"><b><span data-count-to="{{ $stats['products'] }}">{{ number_format($stats['products']) }}</span>+</b><span>Active listings</span></div>
+        <div class="hs"><b><span data-count-to="{{ $stats['students'] }}">{{ number_format($stats['students']) }}</span>+</b><span>Verified students</span></div>
+        <div class="hs"><b><span data-count-to="{{ $stats['campuses'] }}">{{ number_format($stats['campuses']) }}</span>+</b><span>Campuses</span></div>
+    </div>
+</div>
 @endpush
 
 @section('content')
@@ -262,9 +290,6 @@
         'box' => '<path d="M21 8v8a2 2 0 0 1-1 1.7l-7 4a2 2 0 0 1-2 0l-7-4A2 2 0 0 1 3 16V8a2 2 0 0 1 1-1.7l7-4a2 2 0 0 1 2 0l7 4A2 2 0 0 1 21 8z"/><path d="M3.3 7 12 12l8.7-5"/><path d="M12 22V12"/>',
         '__default' => '<path d="M20.6 13.4 12 22l-9-9V4h9z"/><circle cx="7.5" cy="7.5" r="1.5"/>',
     ];
-    $heroProduct = $featured->first();
-    $heroImage = $heroProduct ? $heroProduct->images->first() : null;
-
     $trust = [
         ['icon' => '<path d="M20 6 9 17l-5-5"/>', 'text' => 'Cash on Delivery only'],
         ['icon' => '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/>', 'text' => 'Verified student sellers'],
@@ -281,70 +306,6 @@
         ['icon' => '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>', 'title' => 'Free & unlimited', 'text' => 'Listing and messaging cost nothing. Keep all of what you sell.'],
     ];
 @endphp
-
-<section class="home-hero">
-    <span class="aura a1"></span>
-    <span class="aura a2"></span>
-    <span class="aura a3"></span>
-    <span class="hero-dots"></span>
-
-    <div class="hero-main">
-        <div class="hero-copy">
-            <span class="hero-badge"><span class="dot"></span> Student-only marketplace · Bangladesh</span>
-            <h1>Buy smart. Sell easy.<br><span class="grad">Stay campus connected.</span></h1>
-            <p class="lede">Textbooks, calculators, electronics and hostel essentials from verified students at your campus — all with Cash on Delivery.</p>
-
-            <form class="hero-search" action="{{ route('marketplace.index') }}" method="GET" role="search">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-                <input type="search" name="q" value="{{ request('q') }}" placeholder="Search books, calculators, cycles…" aria-label="Search products">
-                <button class="go" type="submit">Search</button>
-            </form>
-
-            <div class="hero-actions">
-                <a class="btn btn-outline" href="{{ route('marketplace.index') }}">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l1-5h16l1 5"/><path d="M4 9v11h16V9"/><path d="M9 13h6"/></svg>
-                    Browse Marketplace
-                </a>
-                <a class="btn btn-primary" href="{{ route('seller.products.create') }}">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
-                    Start Selling
-                </a>
-            </div>
-
-            <div class="hero-stats">
-                <div class="hs"><b><span data-count-to="{{ $stats['products'] }}">{{ number_format($stats['products']) }}</span>+</b><span>Active listings</span></div>
-                <div class="hs"><b><span data-count-to="{{ $stats['students'] }}">{{ number_format($stats['students']) }}</span>+</b><span>Verified students</span></div>
-                <div class="hs"><b><span data-count-to="{{ $stats['campuses'] }}">{{ number_format($stats['campuses']) }}</span>+</b><span>Campuses</span></div>
-            </div>
-        </div>
-
-        <div class="hero-visual" aria-hidden="true">
-            <span class="hv-glow"></span>
-            <div class="hv-card">
-                <div class="hv-thumb">
-                    @if($heroImage)
-                        <img src="{{ $heroImage->url }}" alt="" loading="lazy">
-                    @else
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="m21 16-5-5L5 21"/></svg>
-                    @endif
-                </div>
-                <div class="hv-body">
-                    <b>{{ $heroProduct->title ?? 'Scientific Calculator FX-991EX' }}</b>
-                    <span class="hv-price">{{ $heroProduct ? bdt($heroProduct->price) : '৳1,450' }}</span>
-                    <span class="pill pill-green" style="align-self:flex-start">Verified student</span>
-                </div>
-            </div>
-            <span class="hv-chip hv-chip-1">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg>
-                COD available
-            </span>
-            <span class="hv-chip hv-chip-2">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M13 2 3 14h7l-1 8 10-12h-7z"/></svg>
-                Fresh listing
-            </span>
-        </div>
-    </div>
-</section>
 
 <div class="trust-strip" aria-hidden="true">
     <div class="trust-track">

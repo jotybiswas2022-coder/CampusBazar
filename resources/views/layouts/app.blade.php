@@ -262,6 +262,8 @@
 <body>
     @include('partials.nav')
 
+    @stack('fullbleed-top')
+
     <main class="page">
         <div class="container">
             @include('partials.flash')
