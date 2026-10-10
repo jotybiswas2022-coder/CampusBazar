@@ -48,7 +48,7 @@
 
     <aside class="stack">
         @if(!empty($allowed))
-            <form class="card card-pad" method="POST" action="{{ route('seller.orders.status', $order) }}">
+            <form id="statusForm" class="card card-pad" method="POST" action="{{ route('seller.orders.status', $order) }}">
                 @csrf
                 @method('PATCH')
                 <h4>Update status</h4>
@@ -85,3 +85,52 @@
     </aside>
 </div>
 @endsection
+
+@push('styles')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<style>
+    .swal2-popup{border-radius:16px!important;font-family:inherit!important}
+    .swal2-title{font-size:1.2rem!important;font-weight:800!important;color:#0f172a!important}
+    .swal2-html-container{font-size:.92rem!important;color:#475569!important}
+    .swal2-confirm,.swal2-cancel{border-radius:10px!important;font-weight:600!important;padding:.6rem 1.2rem!important;box-shadow:none!important}
+    .swal2-styled:focus{box-shadow:none!important}
+</style>
+@endpush
+
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    (function () {
+        var form = document.getElementById('statusForm');
+        if (!form || typeof Swal === 'undefined') return;
+
+        var select = document.getElementById('status');
+
+        form.addEventListener('submit', function (e) {
+            if (form.dataset.swalConfirmed === '1') return;
+            e.preventDefault();
+
+            var option = select && select.options[select.selectedIndex];
+            var label = option ? option.text : 'this status';
+
+            Swal.fire({
+                title: 'Update order status?',
+                html: 'Set order <b>#{{ $order->order_number }}</b> to <b>' + label + '</b>?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, update',
+                cancelButtonText: 'Cancel',
+                confirmButtonColor: '#0b5d3b',
+                cancelButtonColor: '#64748b',
+                reverseButtons: true,
+                focusCancel: true,
+            }).then(function (result) {
+                if (result.isConfirmed) {
+                    form.dataset.swalConfirmed = '1';
+                    form.submit();
+                }
+            });
+        });
+    })();
+</script>
+@endpush
