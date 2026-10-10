@@ -3,28 +3,7 @@
 
 @push('styles')
 <style>
-    /* ============================================================
-       Page head
-       ============================================================ */
-    .mk-head{
-        position:relative;overflow:hidden;border-radius:22px;padding:1.9rem 2rem;color:#fff;
-        background:linear-gradient(140deg,#052a1a 0%,#083d27 52%,#0b5d3b 100%);
-        box-shadow:0 26px 58px -36px rgba(8,61,39,.75);
-    }
-    .mk-head::after{content:"";position:absolute;right:-130px;top:-170px;width:430px;height:430px;border-radius:50%;
-        background:radial-gradient(circle,rgba(52,211,153,.34),transparent 68%);pointer-events:none}
-    .mk-head-inner{position:relative;z-index:1;display:flex;align-items:flex-end;justify-content:space-between;gap:1.4rem;flex-wrap:wrap}
-    .mk-crumbs{display:flex;align-items:center;gap:.45rem;font-size:.75rem;font-weight:600;color:#8ff0c6}
-    .mk-crumbs a{color:#8ff0c6;transition:.18s}
-    .mk-crumbs a:hover{color:#fff}
-    .mk-crumbs .sep{opacity:.45}
-    .mk-head h1{font-size:1.95rem;letter-spacing:-.03em;margin-top:.55rem}
-    .mk-head-sub{color:#bfe0d2;font-size:.88rem;margin-top:.4rem;max-width:62ch}
-    .mk-stats{display:flex;flex-shrink:0}
-    .mk-stats .s{display:flex;flex-direction:column;gap:.05rem}
-    .mk-stats .s + .s{border-left:1px solid rgba(255,255,255,.16);padding-left:1.5rem;margin-left:1.5rem}
-    .mk-stats .s b{font-size:1.45rem;font-weight:800;letter-spacing:-.02em;line-height:1.15}
-    .mk-stats .s span{font-size:.72rem;color:#a9cdbe;font-weight:500}
+    /* The page header band (.page-hero) is shared — see layouts/app.blade.php */
 
     /* ============================================================
        Filter panel
@@ -70,22 +49,9 @@
     @media (max-width:960px){
         .fg-advanced{grid-template-columns:repeat(2,minmax(0,1fr))}
     }
-    @media (max-width:860px){
-        .mk-head{padding:1.6rem 1.5rem}
-        .mk-head h1{font-size:1.6rem}
-    }
 
     /* ---------- Mobile: minimal ---------- */
     @media (max-width:760px){
-        .mk-head{padding:1.3rem 1.15rem;border-radius:18px}
-        .mk-crumbs{font-size:.7rem}
-        .mk-head h1{font-size:1.32rem;margin-top:.45rem}
-        .mk-head-sub{font-size:.81rem;margin-top:.35rem}
-        .mk-stats{width:100%}
-        .mk-stats .s + .s{padding-left:1.1rem;margin-left:1.1rem}
-        .mk-stats .s b{font-size:1.15rem}
-        .mk-stats .s span{font-size:.66rem}
-
         .mk-filters{margin-top:.9rem;padding:1rem}
         .filter-head{margin-bottom:.8rem}
         .filter-grid{gap:.75rem}
@@ -129,10 +95,10 @@
     $formAction = $category ? route('marketplace.category', $category) : route('marketplace.index');
 @endphp
 
-<section class="mk-head">
-    <div class="mk-head-inner">
+<section class="page-hero">
+    <div class="page-hero-inner">
         <div>
-            <nav class="mk-crumbs" aria-label="Breadcrumb">
+            <nav class="page-crumbs" aria-label="Breadcrumb">
                 <a href="{{ route('home') }}">Home</a>
                 <span class="sep">/</span>
                 @if($category)
@@ -144,9 +110,9 @@
                 @endif
             </nav>
             <h1>{{ $category->name ?? 'All listings' }}</h1>
-            <p class="mk-head-sub">{{ $category->description ?? 'Textbooks, gadgets and hostel gear from verified students — Cash on Delivery only.' }}</p>
+            <p class="page-hero-sub">{{ $category->description ?? 'Textbooks, gadgets and hostel gear from verified students — Cash on Delivery only.' }}</p>
         </div>
-        <div class="mk-stats">
+        <div class="page-stats">
             <div class="s"><b>{{ $products->total() }}</b><span>listing{{ $products->total() === 1 ? '' : 's' }}</span></div>
             <div class="s"><b>{{ $campuses->count() }}</b><span>campuses</span></div>
         </div>
